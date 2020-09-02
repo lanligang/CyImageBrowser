@@ -14,13 +14,13 @@ Pod::Spec.new do |s|
 
   s.homepage = 'https://github.com/lanligang/CyImageBrowser'
 
-  s.authors  = { 'lanligang' => lslanligang@sina.com' }
+  s.authors  = { 'lanligang' => 'lslanligang@sina.com' }
 
   s.source   = { :git => 'https://github.com/lanligang/CyImageBrowser.git', :tag => s.version }
 
   s.source_files = 'lib/**/*.{h,m}'
   s.requires_arc = true
   s.ios.deployment_target = '8.0'
-  dependency 'SDWebImage'
+  s.dependency  'SDWebImage'
   s.ios.frameworks = ['UIKit', 'CoreGraphics', 'Foundation']
 end
