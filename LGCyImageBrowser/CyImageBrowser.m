@@ -126,7 +126,13 @@ static float info_defaultHeight = 120.0;                             // 详情�
 #pragma mark - 显示到 window 上
 -(void)showBrowerInfos:(CyBrowerInfos *)browerInfos {
 	NSArray *windows = [UIApplication sharedApplication].windows;
-	UIWindow *window = windows.firstObject;
+
+	UIWindow *window = nil;
+	for (UIWindow *aWidow in windows) {
+		if (aWidow.windowLevel == UIWindowLevelNormal) {
+			window = aWidow;
+		}
+	}
 	[window addSubview:self];
 	[self.dataSource removeAllObjects];
 	if (browerInfos.items) {
