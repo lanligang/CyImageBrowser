@@ -18,7 +18,7 @@ s.authors  = { 'LenSky' => 'lslanligang@sina.com' }
 
 s.source   = { :git => 'https://github.com/lanligang/CyImageBrowser.git', :tag => s.version}
 
-s.source_files = '*.{h,m}'
+s.source_files = 'LGCyImageBrowser/*.{h,m}'
 
 s.requires_arc = true
 

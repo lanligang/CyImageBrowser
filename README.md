@@ -2,10 +2,17 @@
 
 * 图片浏览器，支持缩放 ，拖动消失、双击放大等，支持桥接swift 语言
 
+# ！！ 支持 cocoapod 安装
+```
+	pod 'LGCyImageBrowser'
+
+```
+>  如果找不到请用 'pod repo update' 命令 更新本地仓库
 
 # 效果图
 ![拖拽效果](拖拽效果.png)
 ![查看效果](查看效果.png)
+
 
 
 # 在swift 中使用方法 
