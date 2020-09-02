@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
 s.name     = 'LGCyImageBrowser'
 
-s.version  = '1.0.2'
+s.version  = '1.0.5'
 
 s.license  = { :type => 'MIT' }
 
@@ -16,9 +16,9 @@ s.homepage = 'https://github.com/lanligang/CyImageBrowser'
 
 s.authors  = { 'LenSky' => 'lslanligang@sina.com' }
 
-s.source   = { :git => 'https://github.com/lanligang/CyImageBrowser.git', :tag => s.version.to_s}
+s.source   = { :git => 'https://github.com/lanligang/CyImageBrowser.git', :tag => s.version}
 
-s.source_files = 'cyimageBrower/**/*.{h,m}'
+s.source_files = '*.{h,m}'
 
 s.requires_arc = true
 
