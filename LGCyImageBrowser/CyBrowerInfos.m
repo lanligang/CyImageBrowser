@@ -10,25 +10,24 @@
 
 @implementation CyBrowerInfo
 
--(BOOL)isWeb
+- (BOOL)isWeb
 {
-	if ([_image isKindOfClass:[NSString class]]) {
-		if (_image!=nil && ([_image hasPrefix:@"http://"]||[_image hasPrefix:@"https://"])) return YES;
-	}
-	return NO;
+    if ([_image isKindOfClass:[NSString class]]) {
+        if (_image != nil && ([_image hasPrefix:@"http://"] || [_image hasPrefix:@"https://"])) return YES;
+    }
+    return NO;
 }
 
 @end
 
 @implementation CyBrowerInfos
 
--(instancetype)init {
-	self = [super init];
-	if (self) {
-		self.currentIndex = 0;
-	}
-	return self;
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.currentIndex = 0;
+    }
+    return self;
 }
-
 
 @end
