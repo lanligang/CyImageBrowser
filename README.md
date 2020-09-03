@@ -22,9 +22,8 @@ CyImageBrowser|@property (nonatomic, copy) void (^ makeInfoView)(UIView *infoVie
 CyImageBrowser|@property (nonatomic, copy) void (^ makePageLable)(UILabel *pageLable);|设置当前页码 Lable 的 各种属性 只执行一次
 CyImageBrowser|@property (nonatomic, strong) void (^ changePageFormart)(UILabel *pageLable,NSInteger page,NSInteger totalCount); |当页数发生变化时 会调用此代码块用户可以自己设置页数显示格式
 CyImageBrowser|@property (nonatomic, copy) void (^ changePageInfo)(UIView *infoView, CyBrowerInfo *info);|当前页码改变时，修改图片详细信息时候使用
-CyImageBrowser|@property (nonatomic, strong) void (^ longGestureAction)(CyBrowerInfo *info,NSInteger page); |当用户长按图片时候在此进行相应的处理					 
+CyImageBrowser|@property (nonatomic, strong) void (^ longGestureAction)(CyBrowerInfo *info,NSInteger page); |当用户长按图片时候在此进行相应的处理	
 CyImageBrowser|- (void)showBrowerInfos:(CyBrowerInfos *)browerInfos;|将控件显示到window 上
-
 CyBrowerInfos|@property (nonatomic, strong) NSArray <CyBrowerInfo *> *items;|存放图片信息的数组
 CyBrowerInfos|@property (nonatomic, assign) NSInteger currentIndex;|当前是第几张图片的索引值
 CyBrowerInfo|@property (nonatomic, strong, nullable) id image;|图片对象，支持 字符串的http 的url NSData image
