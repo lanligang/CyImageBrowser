@@ -12,6 +12,8 @@
 # 效果图
 ![效果图](预览.gif)
 
+## 属性以及方法说明
+
 类名|方法、属性名|用途
 --|:--:|--:
 CyImageBrowser |  + (instancetype)cyImageBrower;  |图片查看器的指定构建方法
@@ -23,6 +25,12 @@ CyImageBrowser|@property (nonatomic, copy) void (^ changePageInfo)(UIView *infoV
 CyImageBrowser|@property (nonatomic, strong) void (^ longGestureAction)(CyBrowerInfo *info,NSInteger page); |当用户长按图片时候在此进行相应的处理					 
 CyImageBrowser|- (void)showBrowerInfos:(CyBrowerInfos *)browerInfos;|将控件显示到window 上
 
+CyBrowerInfos|@property (nonatomic, strong) NSArray <CyBrowerInfo *> *items;|存放图片信息的数组
+CyBrowerInfos|@property (nonatomic, assign) NSInteger currentIndex;|当前是第几张图片的索引值
+CyBrowerInfo|@property (nonatomic, strong, nullable) id image;|图片对象，支持 字符串的http 的url NSData image
+CyBrowerInfo|@property (nonatomic, weak, nullable) UIView *showView; |没有显示到查看器时候的一个View 用于截图，不设置可以不用走动画
+CyBrowerInfo|@property (nonatomic, assign, readonly) BOOL isWeb;|只读属性，查看图片是否是 网络图片
+CyBrowerInfo|@property (nonatomic, strong) id imgInfo; |图片详情可为空，也可以设置任何额外参数
 
 # 在swift 中使用方法 
 ```
