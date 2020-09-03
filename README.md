@@ -12,38 +12,27 @@
 # 效果图
 ![效果图](预览.gif)
 
-# 在swift 中使用方法 
-
 类名|方法、属性名|用途
 --|:--:|--:
 CyImageBrowser |  + (instancetype)cyImageBrower;  |图片查看器的指定构建方法
 CyImageBrowser|@property (nonatomic, assign) BOOL isShowInformation;|是否需要显示图片详细信息部件View
 CyImageBrowser|@property (nonatomic, copy) void (^ makeInfoView)(UIView *infoView);|设置底部图片详细信息View 样式 以及初始化 部件上的小控件此处只执行一次
 CyImageBrowser|@property (nonatomic, copy) void (^ makePageLable)(UILabel *pageLable);|设置当前页码 Lable 的 各种属性 只执行一次
-CyImageBrowser|@property (nonatomic, strong) void (^ changePageFormart)(UILabel *pageLable,
-                                                         NSInteger page,
-                                                         NSInteger totalCount); |当页数发生变化时 会调用此代码块用户可以自己设置页数显示格式
+CyImageBrowser|@property (nonatomic, strong) void (^ changePageFormart)(UILabel *pageLable,NSInteger page,NSInteger totalCount); |当页数发生变化时 会调用此代码块用户可以自己设置页数显示格式
 CyImageBrowser|@property (nonatomic, copy) void (^ changePageInfo)(UIView *infoView, CyBrowerInfo *info);|当前页码改变时，修改图片详细信息时候使用
-CyImageBrowser|@property (nonatomic, strong) void (^ longGestureAction)(CyBrowerInfo *info,
-                                                         NSInteger page); |当用户长按图片时候在此进行相应的处理
+CyImageBrowser|@property (nonatomic, strong) void (^ longGestureAction)(CyBrowerInfo *info,NSInteger page); |当用户长按图片时候在此进行相应的处理					 
 CyImageBrowser|- (void)showBrowerInfos:(CyBrowerInfos *)browerInfos;|将控件显示到window 上
 
 
-
-
-
+# 在swift 中使用方法 
 ```
 桥接 bridge.h 中
 …………
-
 #import "CyImageBrowser.h"
-
 …………
-
 ```
 # OC 创建和使用
 ```
-
 	CyImageBrowser *brower =[CyImageBrowser cyImageBrower];
 	brower.isShowInformation = YES;//是否显示图片详情
 //	[brower setMakePageLable:^(UILabel * _Nonnull pageLable) {
