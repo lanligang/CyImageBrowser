@@ -166,19 +166,21 @@ static float info_defaultHeight = 120.0;                             // 详情�
 		if (!animationImgView.image) {
 			animationImgView.image =  [self imageFromView:showView]; //以上方法都无法得到图片执行截图操作
 		}
-        animationImgView.contentMode = showView.contentMode;
+       // animationImgView.contentMode = showView.contentMode;
         animationImgView.frame = [self getRectFromWindow:showView];        //读取到位置
-        CGFloat showView_w = animationImgView.image.size.width;
-        CGFloat showView_h = animationImgView.image.size.height;
-		CGFloat new_w = CY_BROWER_W * 0.9;
-		CGFloat new_h = new_w * showView_h /showView_w;
-		if (new_h > CY_BROWER_H) {
-			new_h = showView_h * 0.9;
-			new_w = new_h * showView_w / showView_h;
+        CGFloat img_w = animationImgView.image.size.width;
+        CGFloat img_h = animationImgView.image.size.height;
+		CGFloat img_scale = img_w / img_h;
+		CGRect rect = animationImgView.frame;
+		CGFloat max_w = CY_BROWER_W * 0.9;
+		CGFloat max_h = CY_BROWER_H * 0.9;
+		if (max_w / img_scale < max_h) {
+			rect.size = CGSizeMake(max_w, max_w / img_scale);
+		} else if (max_h * img_scale < max_w) {
+			rect.size = CGSizeMake(max_h * img_scale, max_h);
 		}
-
         //结束的位置
-        CGRect endFrame = CGRectMake((CY_BROWER_W - new_w) / 2.0, (CY_BROWER_H - new_h) / 2.0, new_w, new_h);
+        CGRect endFrame = CGRectMake((CY_BROWER_W - rect.size.width) / 2.0, (CY_BROWER_H -  rect.size.height) / 2.0, rect.size.width, rect.size.height);
         self.contentView.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:animationImgView];
         self.animationImgView = animationImgView;
@@ -325,8 +327,13 @@ static float info_defaultHeight = 120.0;                             // 详情�
 //获取 一个View 相对 window 的位置
 - (CGRect)getRectFromWindow:(UIView *)view {
     NSArray *windows = [UIApplication sharedApplication].windows;
-    UIWindow *window = windows.firstObject;
-    return [view convertRect:view.bounds toView:window];
+	UIWindow *window_normal = nil;
+	for (UIWindow *window in windows) {
+		if (window.windowLevel == UIWindowLevelNormal) {
+			window_normal = window;
+		}
+	}
+    return [view convertRect:view.bounds toView:window_normal];
 }
 
 @end
