@@ -174,9 +174,9 @@ static float info_defaultHeight = 120.0;                             // 详情�
 		CGRect rect = animationImgView.frame;
 		CGFloat max_w = CY_BROWER_W * 0.9;
 		CGFloat max_h = CY_BROWER_H * 0.9;
-		if (max_w / img_scale < max_h) {
+		if (max_w / img_scale <= max_h) {
 			rect.size = CGSizeMake(max_w, max_w / img_scale);
-		} else if (max_h * img_scale < max_w) {
+		} else if (max_h * img_scale <= max_w) {
 			rect.size = CGSizeMake(max_h * img_scale, max_h);
 		}
         //结束的位置
@@ -209,6 +209,7 @@ static float info_defaultHeight = 120.0;                             // 详情�
             [weakSelf.browerCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:(UICollectionViewScrollPositionCenteredHorizontally) animated:NO];
             weakSelf.currentPage = indexPath.row;
             weakSelf.infoView.hidden = weakSelf.isShowInformation ? NO : YES;         //是否显示 ——> 详情
+
         }
     }];
 }

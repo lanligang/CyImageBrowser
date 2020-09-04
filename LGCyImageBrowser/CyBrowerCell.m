@@ -83,9 +83,9 @@
     CGRect rect = self.scaleScrollView.showImgView.frame;
     CGFloat max_w = CY_BROWER_W * 0.9;
     CGFloat max_h = CY_BROWER_H * 0.9;
-    if (max_w / img_scale < max_h) {
+    if (max_w / img_scale <= max_h) {
         rect.size = CGSizeMake(max_w, max_w / img_scale);
-    } else if (max_h * img_scale < max_w) {
+    } else if (max_h * img_scale <= max_w) {
         rect.size = CGSizeMake(max_h * img_scale, max_h);
     }
     self.scaleScrollView.showImgView.frame = rect;
