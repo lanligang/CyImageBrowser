@@ -15,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CyBrowerCell : UICollectionViewCell
 
 //单点响应
-@property (nonatomic,copy)void(^singleGustureTap)(void);
+@property (nonatomic, copy) void (^ singleGustureTap)(void);
 //长按手势响应
-@property (nonatomic,copy)void(^longGustureAction)(id sender);
+@property (nonatomic, copy) void (^ longGustureAction)(id sender);
 
--(void)configerModel:(CyBrowerInfo *)info;
+- (void)configerModel:(CyBrowerInfo *)info;
 
 @end
 

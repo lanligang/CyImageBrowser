@@ -9,6 +9,7 @@
 #import "CYBrowerMacro.h"
 #import "CyImageBrowser.h"
 #import "CyBrowerCell.h"
+#import "UIImageView+WebCache.h"
 
 static NSString *_browImgViewCellIdentifier = @"browImgViewCell";
 
@@ -152,15 +153,32 @@ static float info_defaultHeight = 120.0;                             // 详情�
     NSInteger currentPage = browerInfos.currentIndex;
     UIView *showView = [self.dataSource[currentPage] showView];
     self.browerCollectionView.alpha = 0;
+	CyBrowerInfo *info =  browerInfos.items[browerInfos.currentIndex];
     if (showView) {
         UIImageView *animationImgView = [UIImageView new];
-        animationImgView.image =  [self imageFromView:showView];
+		if ([info isWeb]) {
+			[animationImgView sd_setImageWithURL:[NSURL URLWithString:info.image]];
+		}else if ([info.image isKindOfClass:[NSData class]]){
+			animationImgView.image = [UIImage imageWithData:info.image];
+		}else if ([info.image isKindOfClass:[NSString class]]){
+			animationImgView.image = [UIImage imageNamed:info.image];
+		}
+		if (!animationImgView.image) {
+			animationImgView.image =  [self imageFromView:showView]; //以上方法都无法得到图片执行截图操作
+		}
         animationImgView.contentMode = showView.contentMode;
         animationImgView.frame = [self getRectFromWindow:showView];        //读取到位置
-        CGFloat showView_w = CGRectGetWidth(animationImgView.bounds);
-        CGFloat showView_h = CGRectGetHeight(animationImgView.bounds);
+        CGFloat showView_w = animationImgView.image.size.width;
+        CGFloat showView_h = animationImgView.image.size.height;
+		CGFloat new_w = CY_BROWER_W * 0.9;
+		CGFloat new_h = new_w * showView_h /showView_w;
+		if (new_h > CY_BROWER_H) {
+			new_h = showView_h * 0.9;
+			new_w = new_h * showView_w / showView_h;
+		}
+
         //结束的位置
-        CGRect endFrame = CGRectMake((CY_BROWER_W - showView_w) / 2.0, (CY_BROWER_H - showView_h) / 2.0, showView_w, showView_h);
+        CGRect endFrame = CGRectMake((CY_BROWER_W - new_w) / 2.0, (CY_BROWER_H - new_h) / 2.0, new_w, new_h);
         self.contentView.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:animationImgView];
         self.animationImgView = animationImgView;
@@ -168,18 +186,17 @@ static float info_defaultHeight = 120.0;                             // 详情�
             animationImgView.frame = endFrame;
             self.contentView.backgroundColor = [UIColor blackColor];
         } completion:^(BOOL finished) {
-            if (finished) {
-                [UIView animateWithDuration:0.5 animations:^{
-                    self.browerCollectionView.alpha = 1;
-                    animationImgView.transform = CGAffineTransformMakeScale(1.5, 1.5);
-                    animationImgView.alpha = 0;
-                }];
-            }
-        }];
+			self.browerCollectionView.alpha = 1;
+			[UIView animateWithDuration:0.3 animations:^{
+				animationImgView.alpha = 0;
+			}];
+		}];
+
     } else {
         [UIView animateWithDuration:0.3 animations:^{
             self.browerCollectionView.alpha = 1.0;
-            self.contentView.backgroundColor = [UIColor blackColor];
+			self.browerCollectionView.alpha = 1;
+			self.contentView.backgroundColor = [UIColor blackColor];
         }];
     }
 
