@@ -12,20 +12,34 @@
 # 效果图
 ![效果图](预览.gif)
 
-# 在swift 中使用方法 
+## 属性以及方法说明
 
+类名|方法、属性名|用途
+--|:--:|--:
+CyImageBrowser |  + (instancetype)cyImageBrower;  |图片查看器的指定构建方法
+同上|@property (nonatomic, assign) BOOL isShowInformation;|是否需要显示图片详细信息部件View
+同上|@property (nonatomic, copy) void (^ makeInfoView)(UIView *infoView);|设置底部图片详细信息View 样式 以及初始化 部件上的小控件此处只执行一次
+同上|@property (nonatomic, copy) void (^ makePageLable)(UILabel *pageLable);|设置当前页码 Lable 的 各种属性 只执行一次
+同上|@property (nonatomic, strong) void (^ changePageFormart)(UILabel *pageLable,NSInteger page,NSInteger totalCount); |当页数发生变化时 会调用此代码块用户可以自己设置页数显示格式
+同上|@property (nonatomic, copy) void (^ changePageInfo)(UIView *infoView, CyBrowerInfo *info);|当前页码改变时，修改图片详细信息时候使用
+同上|@property (nonatomic, strong) void (^ longGestureAction)(CyBrowerInfo *info,NSInteger page); |当用户长按图片时候在此进行相应的处理	
+同上|- (void)showBrowerInfos:(CyBrowerInfos *)browerInfos;|将控件显示到window 上
+CyBrowerInfos|@property (nonatomic, strong) NSArray <CyBrowerInfo *> *items;|存放图片信息的数组
+同上|@property (nonatomic, assign) NSInteger currentIndex;|当前是第几张图片的索引值
+CyBrowerInfo|@property (nonatomic, strong, nullable) id image;|图片对象，支持 字符串的http 的url NSData image
+同上|@property (nonatomic, weak, nullable) UIView *showView; |没有显示到查看器时候的一个View 用于截图，不设置可以不用走动画
+同上|@property (nonatomic, assign, readonly) BOOL isWeb;|只读属性，查看图片是否是 网络图片
+同上|@property (nonatomic, strong) id imgInfo; |图片详情可为空，也可以设置任何额外参数
+
+# 在swift 中使用方法 
 ```
 桥接 bridge.h 中
 …………
-
 #import "CyImageBrowser.h"
-
 …………
-
 ```
 # OC 创建和使用
 ```
-
 	CyImageBrowser *brower =[CyImageBrowser cyImageBrower];
 	brower.isShowInformation = YES;//是否显示图片详情
 //	[brower setMakePageLable:^(UILabel * _Nonnull pageLable) {
