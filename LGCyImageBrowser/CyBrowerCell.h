@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "CyZoomScrollView.h"
 #import "CyBrowerInfos.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CyBrowerCell : UICollectionViewCell
-
+@property (nonatomic, strong) CyZoomScrollView *scaleScrollView;       //缩放的视图
 //单点响应
 @property (nonatomic, copy) void (^ singleGustureTap)(void);
 //长按手势响应

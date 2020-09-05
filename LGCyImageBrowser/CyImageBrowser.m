@@ -63,18 +63,27 @@ static float info_defaultHeight = 120.0;                             // 详情�
     if (pan.state == UIGestureRecognizerStateBegan) {
         self.begain_center = self.contentView.center;
     } else if (pan.state == UIGestureRecognizerStateChanged) {
+		//手势拖动起来的时候进行处理
+		self.pageLable.hidden = YES;
+		self.infoView.hidden = YES;
         self.contentView.center = targetPoint;
         self.contentView.transform = CGAffineTransformMakeScale(scale, scale);
-        self.contentView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:scale];
+		//颜色 透明度 使用 立方  来降低 透明度 0 - 1 阶段 效果比较显著
+        self.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:scale*scale*scale];
     } else {
         if (scale < 0.75) {
             [self siglTapDismiss];              //消失----
         } else {
-            [UIView animateWithDuration:0.2 animations:^{
-                self.contentView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+			CyBrowerInfo *info = (CyBrowerInfo *)self.dataSource[_currentPage];
+			BOOL isHiddenInfoView = (info.imgInfo != nil)?NO:YES;
+			[UIView animateWithDuration:0.2 animations:^{
+				self.contentView.transform = CGAffineTransformMakeScale(1.0, 1.0);
                 self.contentView.center = self.begain_center;
-                self.contentView.backgroundColor = [UIColor blackColor];
-            }];
+                self.backgroundColor = [UIColor blackColor];
+			} completion:^(BOOL finished) {
+				self.infoView.hidden = isHiddenInfoView;
+				self.pageLable.hidden = NO;
+			}];
         }
     }
 }
@@ -125,7 +134,39 @@ static float info_defaultHeight = 120.0;                             // 详情�
 
 #pragma mark target method -
 - (void)siglTapDismiss {
-    [self dismiss];
+    CyBrowerInfo *info = (CyBrowerInfo *)self.dataSource[_currentPage];
+    UIImageView *imgV = [self currentShowImageView];
+    CGRect rect = [self getRectFromWindow:imgV];
+    CGRect endRect = info.showView == nil ? CGRectMake((CY_BROWER_W - rect.size.width)/2.0, (CY_BROWER_H - rect.size.height)/2.0, rect.size.width, rect.size.height) : [self getRectFromWindow:info.showView];
+    self.animationImgView.alpha = 1;
+    self.animationImgView.frame = rect;
+    self.animationImgView.image = imgV.image;
+    self.browerCollectionView.hidden = YES;
+    self.pageLable.hidden = YES;
+    self.infoView.hidden = YES;
+    self.backgroundColor = [UIColor clearColor];
+    [self addSubview:_animationImgView];
+	CGFloat cX0 = CGRectGetMidX(rect);
+	CGFloat cY0 = CGRectGetMidY(rect);
+	CGFloat cX1 = CGRectGetMidX(endRect);
+	CGFloat cY1 = CGRectGetMidY(endRect);
+	CGFloat chageX = cX0 - cX1;
+	CGFloat changeY = cY0 - cY1;
+	float duration = sqrt(pow(chageX, 2) + pow(changeY, 2)) /(CY_BROWER_H /2.5) * 0.5;
+	if (info.showView == nil &&duration <= 0.2)
+	{
+		[self dismiss];
+	}else{
+		duration  = MIN(duration, 0.5);//最大不能超过 0.5
+		[UIView animateWithDuration:duration animations:^{
+			self.animationImgView.frame = endRect;
+			if (!info.showView) {
+				self.animationImgView.alpha = 0;
+			}
+		} completion:^(BOOL finished) {
+			[self dismiss];
+		}];
+	}
 }
 
 #pragma mark - public method
@@ -166,27 +207,25 @@ static float info_defaultHeight = 120.0;                             // 详情�
 		if (!animationImgView.image) {
 			animationImgView.image =  [self imageFromView:showView]; //以上方法都无法得到图片执行截图操作
 		}
-       // animationImgView.contentMode = showView.contentMode;
+        animationImgView.contentMode = showView.contentMode;
         animationImgView.frame = [self getRectFromWindow:showView];        //读取到位置
-        CGFloat img_w = animationImgView.image.size.width;
-        CGFloat img_h = animationImgView.image.size.height;
-		CGFloat img_scale = img_w / img_h;
-		CGRect rect = animationImgView.frame;
-		CGFloat max_w = CY_BROWER_W * 0.9;
-		CGFloat max_h = CY_BROWER_H * 0.9;
-		if (max_w / img_scale <= max_h) {
-			rect.size = CGSizeMake(max_w, max_w / img_scale);
-		} else if (max_h * img_scale <= max_w) {
-			rect.size = CGSizeMake(max_h * img_scale, max_h);
+        CGFloat showView_w = animationImgView.image.size.width;
+        CGFloat showView_h = animationImgView.image.size.height;
+		CGFloat new_w = CY_BROWER_W * 0.9;
+		CGFloat new_h = new_w * showView_h /showView_w;
+		if (new_h > CY_BROWER_H) {
+			new_h = showView_h * 0.9;
+			new_w = new_h * showView_w / showView_h;
 		}
+
         //结束的位置
-        CGRect endFrame = CGRectMake((CY_BROWER_W - rect.size.width) / 2.0, (CY_BROWER_H -  rect.size.height) / 2.0, rect.size.width, rect.size.height);
-        self.contentView.backgroundColor = [UIColor clearColor];
+        CGRect endFrame = CGRectMake((CY_BROWER_W - new_w) / 2.0, (CY_BROWER_H - new_h) / 2.0, new_w, new_h);
+        self.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:animationImgView];
         self.animationImgView = animationImgView;
         [UIView animateWithDuration:0.5 animations:^{
             animationImgView.frame = endFrame;
-            self.contentView.backgroundColor = [UIColor blackColor];
+            self.backgroundColor = [UIColor blackColor];
         } completion:^(BOOL finished) {
 			self.browerCollectionView.alpha = 1;
 			[UIView animateWithDuration:0.3 animations:^{
@@ -198,7 +237,7 @@ static float info_defaultHeight = 120.0;                             // 详情�
         [UIView animateWithDuration:0.3 animations:^{
             self.browerCollectionView.alpha = 1.0;
 			self.browerCollectionView.alpha = 1;
-			self.contentView.backgroundColor = [UIColor blackColor];
+			self.backgroundColor = [UIColor blackColor];
         }];
     }
 
@@ -209,7 +248,6 @@ static float info_defaultHeight = 120.0;                             // 详情�
             [weakSelf.browerCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:(UICollectionViewScrollPositionCenteredHorizontally) animated:NO];
             weakSelf.currentPage = indexPath.row;
             weakSelf.infoView.hidden = weakSelf.isShowInformation ? NO : YES;         //是否显示 ——> 详情
-
         }
     }];
 }
@@ -285,7 +323,7 @@ static float info_defaultHeight = 120.0;                             // 详情�
 {
     if (!_contentView) {
         _contentView = [[UIView alloc]init];
-        _contentView.backgroundColor = [UIColor blackColor];
+        _contentView.backgroundColor = [UIColor clearColor];
         [self addSubview:_contentView];
     }
     return _contentView;
@@ -312,6 +350,17 @@ static float info_defaultHeight = 120.0;                             // 详情�
 }
 
 #pragma mark - private method
+
+-(UIImageView *)currentShowImageView
+{
+	CyBrowerCell *browerCell = (CyBrowerCell *)[self.browerCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentPage inSection:0]];
+	if (browerCell) {
+		return browerCell.scaleScrollView.showImgView;
+	}
+	return nil;
+}
+
+
 - (UIImage *)imageFromView:(UIView *)theView {
     // 开启一个绘图的上下文
     CGFloat scale =  [UIScreen mainScreen].scale;
@@ -328,13 +377,8 @@ static float info_defaultHeight = 120.0;                             // 详情�
 //获取 一个View 相对 window 的位置
 - (CGRect)getRectFromWindow:(UIView *)view {
     NSArray *windows = [UIApplication sharedApplication].windows;
-	UIWindow *window_normal = nil;
-	for (UIWindow *window in windows) {
-		if (window.windowLevel == UIWindowLevelNormal) {
-			window_normal = window;
-		}
-	}
-    return [view convertRect:view.bounds toView:window_normal];
+    UIWindow *window = windows.firstObject;
+    return [view convertRect:view.bounds toView:window];
 }
 
 @end

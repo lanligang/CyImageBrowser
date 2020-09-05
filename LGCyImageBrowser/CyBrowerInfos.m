@@ -17,9 +17,9 @@
     }
     return NO;
 }
-+(CyBrowerInfo*(^)(id image,UIView *showView,id imgInfo))make
++(CyBrowerInfo*(^)( id image, UIView   * _Nullable showView, id _Nullable imgInfo))make;
 {
-	return ^(id aImg,UIView *showV,id imgInfo){
+	return ^(id aImg,UIView * _Nullable showV,id _Nullable imgInfo){
 		CyBrowerInfo*info = [CyBrowerInfo new];
 		info.image = aImg;
 		info.showView = showV;

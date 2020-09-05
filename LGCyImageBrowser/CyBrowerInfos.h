@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) id imgInfo;               //图片详情  根据需求自定义
 
 //链式构造方法
-+(CyBrowerInfo*(^)(id image,UIView *showView,id imgInfo))make;
++(CyBrowerInfo*(^)( id image, UIView   * _Nullable showView, id _Nullable imgInfo))make;
 
 
 @end
