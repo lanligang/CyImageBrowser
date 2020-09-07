@@ -10,6 +10,7 @@
 #import "CyImageBrowser.h"
 #import "CyBrowerCell.h"
 #import "UIImageView+WebCache.h"
+#import "UIImage+CyShowRect.h"
 
 static NSString *_browImgViewCellIdentifier = @"browImgViewCell";
 
@@ -156,6 +157,9 @@ static float info_defaultHeight = 120.0;                             // 详情�
 	if (info.showView == nil &&duration <= 0.2)
 	{
 		[self dismiss];
+	   if (info.showView) {
+		   info.showView.hidden = NO;
+	   }
 	}else{
 		duration  = MIN(duration, 0.5);//最大不能超过 0.5
 		[UIView animateWithDuration:duration animations:^{
@@ -164,6 +168,9 @@ static float info_defaultHeight = 120.0;                             // 详情�
 				self.animationImgView.alpha = 0;
 			}
 		} completion:^(BOOL finished) {
+			if (info.showView) {
+				info.showView.hidden = NO;
+			}
 			[self dismiss];
 		}];
 	}
@@ -209,17 +216,11 @@ static float info_defaultHeight = 120.0;                             // 详情�
 		}
         animationImgView.contentMode = showView.contentMode;
         animationImgView.frame = [self getRectFromWindow:showView];        //读取到位置
-        CGFloat showView_w = animationImgView.image.size.width;
-        CGFloat showView_h = animationImgView.image.size.height;
-		CGFloat new_w = CY_BROWER_W * 0.9;
-		CGFloat new_h = new_w * showView_h /showView_w;
-		if (new_h > CY_BROWER_H) {
-			new_h = showView_h * 0.9;
-			new_w = new_h * showView_w / showView_h;
+		if (info.isHiddenOgView) {
+			showView.hidden = YES;
 		}
-
         //结束的位置
-        CGRect endFrame = CGRectMake((CY_BROWER_W - new_w) / 2.0, (CY_BROWER_H - new_h) / 2.0, new_w, new_h);
+		CGRect endFrame = [animationImgView.image showRect];
         self.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:animationImgView];
         self.animationImgView = animationImgView;
@@ -254,6 +255,7 @@ static float info_defaultHeight = 120.0;                             // 详情�
 
 - (void)dismiss
 {
+	[self clearBlock];  //清理掉所有的代码块避免出现强引用问题 如果 strong 引用此view 控件 需要重新设置代码块
     [self removeFromSuperview];     //临时的一个 消失方法
 }
 
@@ -337,7 +339,7 @@ static float info_defaultHeight = 120.0;                             // 详情�
     if (_changePageFormart) {
         _changePageFormart(self.pageLable, _currentPage, totalCount);       //用户在外部自行格式化 ----
     } else {
-        self.pageLable.text = [NSString stringWithFormat:@"%ld/%ld", currentPage + 1, (long)totalCount];
+		self.pageLable.text = [NSString stringWithFormat:@"%d/%ld", currentPage + 1, (long)totalCount];
     }
     [self bringSubviewToFront:self.infoView];     //放到最顶层
     !_changePageInfo ? : _changePageInfo(self.infoView, self.dataSource[_currentPage]);  //修改页码底部的信息
@@ -360,7 +362,14 @@ static float info_defaultHeight = 120.0;                             // 详情�
 	return nil;
 }
 
-
+-(void)clearBlock
+{
+	_makeInfoView = nil; //内部释放 block  代码块！
+	_makePageLable = nil;
+	_changePageFormart = nil;
+	_longGestureAction = nil;
+	_changePageInfo = nil;
+}
 - (UIImage *)imageFromView:(UIView *)theView {
     // 开启一个绘图的上下文
     CGFloat scale =  [UIScreen mainScreen].scale;

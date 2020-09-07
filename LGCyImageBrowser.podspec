@@ -2,14 +2,14 @@ Pod::Spec.new do |s|
 
 s.name     = 'LGCyImageBrowser'
 
-s.version  = '2.0.6'
+s.version  = '2.0.7'
 
 s.license  = { :type => 'MIT' }
 
-s.summary  = '图片浏览器，支持缩放 ，拖动消失、双击放大等，支持桥接swift 语言'
+s.summary  = '可拖动的 图片浏览器，支持缩放 ，拖动消失、双击放大等，支持桥接swift 语言'
 
 s.description = <<-DESC
-                    图片浏览器，支持缩放 ，拖动消失、双击放大等，支持桥接swift 语言
+                   可拖动的 图片浏览器，支持缩放 ，拖动消失、双击放大等，支持桥接swift 语言
                    DESC
 
 s.homepage = 'https://github.com/lanligang/CyImageBrowser'

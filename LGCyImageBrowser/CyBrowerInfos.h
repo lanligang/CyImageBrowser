@@ -11,9 +11,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @interface CyBrowerInfo : NSObject
+/** 是否隐藏外部控件上的视图 */
+@property(nonatomic,assign)BOOL isHiddenOgView; // is hidden Original View
 
+/** 图片数据 */
 @property (nonatomic, strong, nullable) id image;       // image  imageName  url Data
 
+/** 原始的控件 */
 @property (nonatomic, weak, nullable) UIView *showView; //view 原始View
 
 @property (nonatomic, assign, readonly) BOOL isWeb;

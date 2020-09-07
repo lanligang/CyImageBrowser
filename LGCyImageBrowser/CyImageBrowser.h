@@ -13,25 +13,56 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CyImageBrowser : UIView
 
-@property (nonatomic, assign) BOOL isShowInformation;                           //设置info View 的位置   图片信息
+//设置
+@property (nonatomic, assign) BOOL isShowInformation;
 
-@property (nonatomic, copy) void (^ makeInfoView)(UIView *infoView);            //底部详细信息的View
+#warning  以下代码块会在 clear 或者 执行完一次后被清理 如果 strong 引用该控件  重复使用时 请重新设置
 
-@property (nonatomic, copy) void (^ makePageLable)(UILabel *pageLable);      //修改 pageLable 的样式 以及位置
+@property (nonatomic, copy) void (^ makeInfoView)(UIView *infoView);
 
+/** 修改 pageLable 的样式
+ *  当被添加到 父控件时候会调用
+ *  可在此自定义 页码的各种属性以及位置
+ */
+@property (nonatomic, copy) void (^ makePageLable)(UILabel *pageLable);
+
+/**  格式化页码
+ * block 中自定义显示格式
+ * pageLable   页码标签
+ * page        当前页数   从 0 开始
+ *totalCount   总页数
+ */
 @property (nonatomic, strong) void (^ changePageFormart)(UILabel *pageLable,
                                                          NSInteger page,
-                                                         NSInteger totalCount); //修改页码   在此方法中自定义显示格式 以及详情View 的显示样式 与否
-
+                                                         NSInteger totalCount);
+/** 详细信息设置
+* block 中根据 CyBrowerInfo 参数设置详细信息
+* infoView    详细信息的承载页
+* info        CyBrowerInfo 承载图片信息页
+*/
 @property (nonatomic, copy) void (^ changePageInfo)(UIView *infoView, CyBrowerInfo *info); // 详细信息 修改
 
+/** 长按
+ * 用户长按响应事件外部处理
+ *  info  CyBrowerInfo
+ */
 @property (nonatomic, strong) void (^ longGestureAction)(CyBrowerInfo *info,
-                                                         NSInteger page);   //长按了某个 item 在此方法中自定义处理长按
+                                                         NSInteger page);
+/**
+ * CyImageBrowser  构造方法
+ * return CyImageBrowser 对象
+ */
++ (instancetype)cyImageBrower;
 
-//构建方法 ---
-+ (instancetype)cyImageBrower;  //持有 时 不进行strong 引用
-//显示方法
+/**
+ *  显示到 window 上
+ *  CyBrowerInfos 携带图片数组数据
+ */
 - (void)showBrowerInfos:(CyBrowerInfos *)browerInfos; //显示浏览详情
+
+/** 禁用的构造方法 */
+-(instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
+-(instancetype)init NS_UNAVAILABLE;
 
 @end
 

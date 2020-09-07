@@ -11,9 +11,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CyZoomScrollView : UIScrollView<UIScrollViewDelegate>
+
 //显示图片的View
-@property (nonatomic, strong) UIImageView *showImgView;      //显示的View
+@property (nonatomic, strong) UIImageView *showImgView;
+
+//单点回调
 @property (nonatomic, copy) void (^ singleTapBlock)(void);
+
 
 @end
 

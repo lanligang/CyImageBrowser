@@ -11,6 +11,7 @@
 #import "CYBrowerMacro.h"
 
 #import "UIImageView+WebCache.h"
+#import "UIImage+CyShowRect.h"
 
 @interface CyBrowerCell ()<UIScrollViewDelegate>
 
@@ -86,7 +87,7 @@
     } else if (max_h * img_scale < max_w) {
         rect.size = CGSizeMake(max_h * img_scale, max_h);
     }
-    self.scaleScrollView.showImgView.frame = rect;
+    self.scaleScrollView.showImgView.frame = [image showRect];
     self.scaleScrollView.zoomScale = 0.99;
     [self.scaleScrollView setZoomScale:1.0 animated:YES];
 }
