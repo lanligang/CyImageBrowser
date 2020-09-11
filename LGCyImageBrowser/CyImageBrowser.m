@@ -203,13 +203,15 @@ static float info_defaultHeight = 120.0;                             // 详情�
     self.browerCollectionView.alpha = 0;
 	CyBrowerInfo *info =  browerInfos.items[browerInfos.currentIndex];
     if (showView) {
-        UIImageView *animationImgView = [UIImageView new];
+       UIImageView *animationImgView = [UIImageView new];
 		if ([info isWeb]) {
 			[animationImgView sd_setImageWithURL:[NSURL URLWithString:info.image]];
 		}else if ([info.image isKindOfClass:[NSData class]]){
 			animationImgView.image = [UIImage imageWithData:info.image];
 		}else if ([info.image isKindOfClass:[NSString class]]){
 			animationImgView.image = [UIImage imageNamed:info.image];
+		}else if ([info.image isKindOfClass:[UIImage class]]){
+			animationImgView.image = info.image;
 		}
 		if (!animationImgView.image) {
 			animationImgView.image =  [self imageFromView:showView]; //以上方法都无法得到图片执行截图操作
