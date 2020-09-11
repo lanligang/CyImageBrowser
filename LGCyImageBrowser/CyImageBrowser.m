@@ -156,10 +156,8 @@ static float info_defaultHeight = 120.0;                             // 详情�
 	float duration = sqrt(pow(chageX, 2) + pow(changeY, 2)) /(CY_BROWER_H /2.5) * 0.5;
 	if (info.showView == nil &&duration <= 0.2)
 	{
-		[self dismiss];
-	   if (info.showView) {
-		   info.showView.hidden = NO;
-	   }
+	   [self showOrgView];
+	   [self dismiss];
 	}else{
 		duration  = MIN(duration, 0.5);//最大不能超过 0.5
 		[UIView animateWithDuration:duration animations:^{
@@ -168,11 +166,18 @@ static float info_defaultHeight = 120.0;                             // 详情�
 				self.animationImgView.alpha = 0;
 			}
 		} completion:^(BOOL finished) {
-			if (info.showView) {
-				info.showView.hidden = NO;
-			}
+			[self showOrgView];
 			[self dismiss];
 		}];
+	}
+}
+//显示原始的图片
+-(void)showOrgView
+{
+	for (CyBrowerInfo * aInfo in self.dataSource) {
+		if (aInfo.showView) {
+			aInfo.showView.hidden = NO;
+		}
 	}
 }
 
