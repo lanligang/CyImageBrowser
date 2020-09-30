@@ -193,7 +193,8 @@ static float info_defaultHeight = 120.0;                             // 详情�
     NSArray *windows = [UIApplication sharedApplication].windows;
     UIWindow *window = nil;
     for (UIWindow *aWidow in windows) {
-        if (aWidow.windowLevel == UIWindowLevelNormal) {
+        if (aWidow.windowLevel == UIWindowLevelNormal &&
+			[[NSString stringWithFormat:@"%@",aWidow.class] isEqualToString:@"UIWindow"]) {
             window = aWidow;
         }
     }
@@ -242,7 +243,7 @@ static float info_defaultHeight = 120.0;                             // 详情�
 		}];
 
     } else {
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.4 animations:^{
             self.browerCollectionView.alpha = 1.0;
 			self.browerCollectionView.alpha = 1;
 			self.backgroundColor = [UIColor blackColor];

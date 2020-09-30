@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
 s.name     = 'LGCyImageBrowser'
 
-s.version  = '2.0.10'
+s.version  = '2.0.11'
 
 s.license  = { :type => 'MIT' }
 
