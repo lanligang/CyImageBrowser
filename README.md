@@ -219,4 +219,10 @@ class ImgBrowViewController: UIViewController {
 
 ```
 
+# 在wkWebView给所有的图片添加点击事件 并获知相对父wkWebView 中 scrollView 上的 位置
+```
+//将该js 在 加载完成后插入改内容 就能够响应 点击了 ,点击交互的名称是 showImagesWithUrl ;
+ var images = document.getElementsByTagName('img'); var imageInfos; for(var i = 0;i< images.length;i++){ var img = images[i]; img.onclick = function(e){ var inamgeInfos = imageMsge(e); window.webkit.messageHandlers.showImagesWithUrl.postMessage(inamgeInfos); } }  function imageMsge(e){  var imageInfos = {infos:[],seleted:0,count:images.length};  for(var k = 0;k< images.length;k++){ var img = images[k];  var aimage =  e.srcElement; var isSeleted = false;  if(img.src === aimage.src && img.offsetTop == aimage.offsetTop ){  imageInfos.seleted = k; }  var data = { y:img.offsetTop,  x:img.offsetLeft, width:img.offsetWidth, height:img.offsetHeight, url:img.src, }; imageInfos.infos[k] = data; }  return imageInfos; }
+```
+
 
